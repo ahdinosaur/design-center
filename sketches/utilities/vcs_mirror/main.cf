@@ -50,35 +50,46 @@ bundle agent mirror(prefix, class_prefix, vcs, path, origin, branch, runas, umas
       "canon_prefix" string => canonify("$(prefix)");
       "vcs_type" string => lastnode("$(vcs)","/");
 
-    !nowipe::
-      "git_update_command" slist =>
+    variables_ok.path_exists::
+      "git_mirror_command" slist =>
       {
-        # Remove untracked files
-        "$(vcs) clean -f -f -x -q -d .",
-        # Discard changes to index and working tree since HEAD
-        "$(vcs) reset -q --hard HEAD",
-        # Check out the proper branch
-        "$(vcs) checkout -q $(branch)",
-        # Pull the latest changes from origin
-        "$(vcs) pull -q -s recursive -Xtheirs origin $(branch)",
-        # Reset the working tree to the latest updates
-        "$(vcs) reset -q --hard HEAD",
+        # clone repository into an existing directory with Git
+	"/bin/sh -c \"$(vcs) clone --no-checkout -b $(branch) $(origin) $(path)/tmp
+	/bin/mv $(path)/tmp/.git $(path)
+	/bin/rmdir $(path)/tmp
+	cd $(path)
+	$(vcs) reset --hard HEAD\"",
       };
 
-    nowipe::
+   variables_ok.!path_exists::
+      "git_mirror_command" slist =>
+      {
+        # clone the given repository with Git
+	"$(vcs) clone -b $(branch) $(origin) $(path)",
+      };
+
+   any::
+
+    #!nowipe::
+    #  "git_update_command" slist =>
+    #  {
+    #    # Remove untracked files
+    #    "$(vcs) clean -f -f -x -q -d .",
+    #    # Discard changes to index and working tree since HEAD
+    #    "$(vcs) reset -q --hard HEAD",
+    #    # Check out the proper branch
+    #    "$(vcs) checkout -q $(branch)",
+    #    # Pull the latest changes from origin
+    #    "$(vcs) pull -q -s recursive -Xtheirs origin $(branch)",
+    #    # Reset the working tree to the latest updates
+    #    "$(vcs) reset -q --hard HEAD",
+    #  };
+
+    #nowipe::
       "git_update_command" slist =>
       {
         "$(vcs) pull origin $(branch)",
       };
-
-    any::
-
-      "git_mirror_command" slist =>
-      {
-        # clone the given repository with Git
-        "$(vcs) clone -b $(branch) $(origin) $(path)"
-      };
-
       "git_configfile" string => "$(path)/.git/config";
 
       "git_config_template" string => "
@@ -186,8 +197,8 @@ bundle agent mirror(prefix, class_prefix, vcs, path, origin, branch, runas, umas
       "New clone of $(origin) (branch $(branch) created in $(path)"
       ifvarclass => "$(canon_prefix)vcs_mirrored";
 
-    variables_ok.path_exists.!vcsconfig_exists::
-      "Sorry, we could not clone $(origin) (branch $(branch)) in $(path) because that path already exists";
+    #variables_ok.path_exists.!vcsconfig_exists::
+    #  "Sorry, we could not clone $(origin) (branch $(branch)) in $(path) because that path already exists";
 }
 
 body contain test_aware_contain(user, dir, umask)
