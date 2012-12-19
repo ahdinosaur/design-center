@@ -1,0 +1,38 @@
+body file control
+{
+  namespace => "cfdc_openrc";
+}
+
+bundle agent entry(prefix, class_prefix, service, runlevel)
+{
+  meta:
+      # __PREFIX__ will be supplied by cf-sketch
+      "vars[prefix][type]"               string => "NON_EMPTY_STRING";
+      "vars[prefix][default]"            string => "__PREFIX__";
+
+      "vars[class_prefix][type]"          string => "NON_EMPTY_STRING";
+      "vars[class_prefix][default]"       string => "__CLASS_PREFIX__";
+
+      "vars[service][type]"            string => "NON_EMPTY_STRING";
+
+      "vars[runlevel][type]"             string => "NON_EMPTY_STRING";
+
+  commands:
+      "/sbin/rc-update add $(service) $(runlevel)"
+      comment => "TODO: do this better.";
+
+  vars:
+      # often you need a unique value for the current run through a
+      # bundle, especially if you use if_repaired and such.  The
+      # canon_prefix will give you that.
+      "canon_prefix" string => canonify("$(prefix)");
+
+  reports:
+      # use the "verbose" context to display extra information (for the user)
+    default:verbose::
+      "Adding $(service) to $(runlevel) runlevel.";
+
+      # use the "debug" context to help debug the sketch (for the developer)
+    default:debug::
+      "This is debugging; running from $(class_prefix)";
+}
