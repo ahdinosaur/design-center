@@ -1,0 +1,22 @@
+{
+    "manifest":
+    {
+        "main.cf": { "desc": "main file" },
+        "test.cf": { "desc": "standalone test" },
+        "README.md": { "documentation": true },
+    },
+
+    "metadata":
+    {
+        "name": "Apps::configure",
+	"description": "Configure files with config values.",
+        "version": 0.01,
+        "license": "MIT",
+        "tags": [ "cfdc" ],
+        "authors": [ "Michael Williams <dinosaur@riseup.net>" ],
+        "depends": { "CFEngine::stdlib": { "version": 105 }, "cfengine": { "version": "3.4.0" }, "os": [ "linux"] }
+    },
+
+    "entry_point": "main.cf",
+    "interface": [ "main.cf" ]
+}
