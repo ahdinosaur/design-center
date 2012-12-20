@@ -3,7 +3,7 @@ body file control
   namespace => "cfdc_add_package";
 }
 
-bundle agent entry(prefix, class_prefix, packages, method)
+bundle agent entry(prefix, class_prefix, packages)
 {
   meta:
       # __PREFIX__ will be supplied by cf-sketch
@@ -16,9 +16,6 @@ bundle agent entry(prefix, class_prefix, packages, method)
       "vars[class_prefix][default]"       string => "__CLASS_PREFIX__";
 
       "vars[packages][type]"            string => "LIST(NON_EMPTY_STRING)";
-
-      "vars[method][type]"		string => "NON_EMPTY_STRING";
-      "vars[method][default]"		string => "generic";
 
   vars:
       # often you need a unique value for the current run through a
