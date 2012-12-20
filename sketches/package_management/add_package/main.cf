@@ -3,7 +3,7 @@ body file control
   namespace => "cfdc_add_package";
 }
 
-bundle agent entry(prefix, class_prefix)
+bundle agent entry(prefix, class_prefix, packages, method)
 {
   meta:
       # __PREFIX__ will be supplied by cf-sketch
