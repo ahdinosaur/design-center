@@ -1,0 +1,43 @@
+body file control
+{
+  namespace => "cfdc_add_package";
+}
+
+bundle agent entry(prefix, class_prefix)
+{
+  meta:
+      # __PREFIX__ will be supplied by cf-sketch
+      "vars[prefix][type]"               string => "NON_EMPTY_STRING";
+      "vars[prefix][default]"            string => "__PREFIX__";
+
+      # __ABS_BUNDLE_HOME__ will be supplied by cf-sketch; there's
+      # also __BUNDLE_HOME__ for a relative path
+      "vars[class_prefix][type]"          string => "NON_EMPTY_STRING";
+      "vars[class_prefix][default]"       string => "__CLASS_PREFIX__";
+
+      "vars[packages][type]"            string => "LIST(NON_EMPTY_STRING)";
+
+      "vars[method][type]"		string => "NON_EMPTY_STRING";
+      "vars[method][default]"		string => "generic";
+
+  vars:
+      # often you need a unique value for the current run through a
+      # bundle, especially if you use if_repaired and such.  The
+      # canon_prefix will give you that.
+      "canon_prefix" string => canonify("$(prefix)");
+
+  packages:
+      "$(packages)"
+        package_policy => "add",
+	package_method => "$(method)";
+
+
+  reports:
+      # use the "verbose" context to display extra information (for the user)
+    default:verbose::
+      "Installing packages $(packages)";
+
+      # use the "debug" context to help debug the sketch (for the developer)
+    default:debug::
+      "This is debugging; running from $(bundle_home)";
+}
