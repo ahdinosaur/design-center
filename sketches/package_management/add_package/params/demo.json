@@ -2,6 +2,6 @@
     "Packages::Generic::add":
     {
         "activated" : true,
-	"packages" : ["app-misc/mc"],
+	"packages" : ["htop"],
     }
 }

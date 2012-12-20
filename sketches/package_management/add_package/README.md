@@ -1,7 +1,7 @@
 # sketch_template - Provide a workable sketch template
 
 ## AUTHORS
-Ted Zlatanov <tzz@lifelogs.com>
+michael williams <dinosaur@riseup.net>
 
 ## PLATFORM
 
@@ -34,6 +34,3 @@ crazy filling it out.  Better to document in `test.cf` and
 
 CFEngine::stdlib (the COPBL)
 
-## SAMPLE USAGE
-
-See `test.cf`.
