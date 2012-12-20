@@ -3,6 +3,5 @@
     {
         "activated" : true,
 	"packages" : ["app-misc/mc"],
-	"method" : "generic"
     }
 }

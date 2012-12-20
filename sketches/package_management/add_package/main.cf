@@ -29,7 +29,7 @@ bundle agent entry(prefix, class_prefix, packages, method)
   packages:
       "$(packages)"
         package_policy => "add",
-	package_method => "$(method)";
+	package_method => generic;
 
 
   reports:
