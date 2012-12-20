@@ -1,0 +1,53 @@
+body file control
+{
+  namespace => "cfdc_sketch_template";
+}
+
+bundle agent entry(prefix, class_prefix, service, file, config)
+{
+  meta:
+      # __PREFIX__ will be supplied by cf-sketch
+      "vars[prefix][type]"               string => "NON_EMPTY_STRING";
+      "vars[prefix][default]"            string => "__PREFIX__";
+
+      # __CLASS_PREFIX__ will be supplied by cf-sketch; there's
+      # also __BUNDLE_HOME__ for a relative path
+      "vars[class_prefix][type]"          string => "NON_EMPTY_STRING";
+      "vars[class_prefix][default]"       string => "__CLASS_PREFIX__";
+
+      "vars[service][type]"            string => "NON_EMPTY_STRING";
+      "vars[service][default]"		string => "true";
+
+      "vars[file][type]"            string => "NON_EMPTY_STRING";
+
+      "vars[config][type]"              string => "ARRAY()";
+
+  vars:
+      # often you need a unique value for the current run through a
+      # bundle, especially if you use if_repaired and such.  The
+      # canon_prefix will give you that.
+      "canon_prefix" string => canonify("$(prefix)");
+
+  files:
+      "$(file)"
+      handle => "configure_app",
+      comment => "ensure app is configured correctly",
+      create => "true",
+      edit_line => set_config_values("$(config)"),
+      classes => if_repaired("service_restart_required");
+
+  commands:
+    restart_required::
+      "$(service) restart"
+      handle => "restart_app",
+      comment => "restart app to run new configuration";
+
+  reports:
+      # use the "verbose" context to display extra information (for the user)
+    default:verbose::
+      "Configuring $(file) with $(config).";
+
+      # use the "debug" context to help debug the sketch (for the developer)
+    default:debug::
+      "This is debugging; running from $(class_prefix)";
+}
