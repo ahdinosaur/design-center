@@ -10,7 +10,7 @@
     {
         "name": "Packages::Generic::add",
 	"description": "Add a package to the system.",
-        "version": 1.00,
+        "version": 0.01,
         "license": "MIT",
         "tags": [ "cfdc" ],
         "authors": [ "Michael Williams <dinosaur@riseup.net>" ],
