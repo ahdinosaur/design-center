@@ -1,3 +1,4 @@
+applications/configure Apps::configure
 cloud/cloud_services Cloud::Services
 databases/db_install Database::Install
 libraries/copbl CFEngine::stdlib
