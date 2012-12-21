@@ -8,7 +8,7 @@
 
     "metadata":
     {
-        "name": "Apps::configure",
+        "name": "Apps::Generic::configure",
 	"description": "Configure files with config values.",
         "version": 0.01,
         "license": "MIT",
