@@ -28,19 +28,12 @@ bundle agent configure(prefix, class_prefix, service, file, config)
       # canon_prefix will give you that.
       "canon_prefix" string => canonify("$(prefix)");
 
-  methods:
-      "config" usebundle => edit_config,
-       comment => "edit the configuration in $(file)";
-}
-
-bundle agent edit_config
-{
   files:
-     "$(configure.file)"
+     "$(file)"
        handle => "configure_app",
        comment => "ensure app is configured correctly",
        create => "true",
-       edit_line => default:set_config_values("configure.config"),
+       edit_line => default:set_config_values("config"),
        classes => default:if_repaired("service_restart_required");
 
   commands:
