@@ -3,7 +3,7 @@ body file control
   namespace => "cfdc_apps_generic_configure";
 }
 
-bundle agent entry(prefix, class_prefix, service, file, config)
+bundle agent configure(prefix, class_prefix, service, file, config)
 {
   meta:
       # __PREFIX__ will be supplied by cf-sketch
@@ -28,19 +28,26 @@ bundle agent entry(prefix, class_prefix, service, file, config)
       # canon_prefix will give you that.
       "canon_prefix" string => canonify("$(prefix)");
 
+  methods:
+      "config" usebundle => edit_config,
+       comment => "edit the configuration in $(file)";
+}
+
+bundle agent edit_config
+{
   files:
-      "$(file)"
-      handle => "configure_app",
-      comment => "ensure app is configured correctly",
-      create => "true",
-      edit_line => default:set_config_values("$(config)"),
-      classes => default:if_repaired("service_restart_required");
+     "$(configure.file)"
+       handle => "configure_app",
+       comment => "ensure app is configured correctly",
+       create => "true",
+       edit_line => default:set_config_values("configure.config"),
+       classes => default:if_repaired("service_restart_required");
 
   commands:
     service_restart_required::
-      "$(service) restart"
-      handle => "restart_app",
-      comment => "restart app to run new configuration";
+     "$(service) restart"
+       handle => "restart_app",
+       comment => "restart app to run new configuration";
 
   reports:
       # use the "verbose" context to display extra information (for the user)
