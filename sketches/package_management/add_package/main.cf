@@ -25,7 +25,7 @@ bundle agent entry(prefix, class_prefix, packages)
 
   packages:
       "$(packages)"
-        package_policy => "addupdate",
+        package_policy => "add",
 	package_method => default:generic;
 
 
