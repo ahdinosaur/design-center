@@ -1,6 +1,6 @@
 body file control
 {
-  namespace => "cfdc_sketch_template";
+  namespace => "cfdc_apps_generic_configure";
 }
 
 bundle agent entry(prefix, class_prefix, service, file, config)
@@ -33,7 +33,7 @@ bundle agent entry(prefix, class_prefix, service, file, config)
       handle => "configure_app",
       comment => "ensure app is configured correctly",
       create => "true",
-      edit_line => set_config_values("$(config)"),
+      edit_line => default:set_config_values("$(config)"),
       classes => default:if_repaired("service_restart_required");
 
   commands:
