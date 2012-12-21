@@ -37,7 +37,7 @@ bundle agent entry(prefix, class_prefix, service, file, config)
       classes => if_repaired("service_restart_required");
 
   commands:
-    restart_required::
+    service_restart_required::
       "$(service) restart"
       handle => "restart_app",
       comment => "restart app to run new configuration";
