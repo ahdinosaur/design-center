@@ -34,7 +34,7 @@ bundle agent entry(prefix, class_prefix, service, file, config)
       comment => "ensure app is configured correctly",
       create => "true",
       edit_line => set_config_values("$(config)"),
-      classes => if_repaired("service_restart_required");
+      classes => default:if_repaired("service_restart_required");
 
   commands:
     service_restart_required::
